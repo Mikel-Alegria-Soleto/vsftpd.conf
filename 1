@@ -1,0 +1,323 @@
+# Ponemos el servicio en el arranque des sistema, funcionando sobre ipv4
+
+listen=YES
+
+listen_ipv6=NO
+
+ftpd_banner=Hola! Estás en el FTP de mikel
+
+
+
+
+
+# Habilitamos la conexión de los usuarios de la maquina local, a nuestro servidor FTP
+
+local_enable=YES
+
+
+
+#limitar el acceso de escritura solo a usuarios locales autenticados
+
+write_enable=YES
+
+#If set to NO, all download requests will give permission denied.
+
+download_enable=YES
+
+
+
+
+
+
+
+
+
+#####################ANONYMOUS ACCESS
+
+# Deshabilitamos los accesos anónimos al servidor FTP
+
+anonymous_enable=YES
+
+
+
+# Uncomment this to allow the anonymous FTP user to upload files. This only
+
+# has an effect if the above global write enable is activated. Also, you will
+
+# obviously need to create a directory writable by the FTP user.
+
+anon_upload_enable=NO
+
+#
+
+# Uncomment this if you want the anonymous FTP user to be able to create
+
+# new directories.
+
+anon_mkdir_write_enable=NO
+
+#
+
+# Deshabilita utilizar TLS/SSL con usuarios anónimos (Ya está puesto arriba)
+
+#allow_anon_ssl=NO
+
+
+
+#When enabled, anonymous users will only be allowed to download files which are world readable.
+
+anon_world_readable_only=YES
+
+
+
+anon_max_rate=100000
+
+#Directorio raíz que se asigna a los usuarios anónimos cuando se conectan al servidor FTP
+
+
+anon_root=/srv/ftp
+
+#El parámetro "allow_writeable_chroot" se utiliza para controlar si los usuarios anónimos 
+
+#pueden escribir dentro del directorio raíz asignado ("anon_root") o no
+
+allow_writeable_chroot=YES
+
+
+###############SSL
+
+# Habilita el soporte de TLS/SSL
+
+ssl_enable=YES
+
+#Obliga a utilizar una conexión segura SSL/TLS para las transferencias de datos 
+
+#(subidas y descargas) cuando los clientes se conectan al servidor de forma local 
+
+force_local_data_ssl=YES
+
+#Obliga a utilizar una conexión segura SSL/TLS para las autenticaciones de usuarios locales.
+
+force_local_logins_ssl=YES
+
+#No se requiere la reutilización de sesiones SSL/TLS. Cada transferencia de datos 
+
+#establecerá una nueva sesión SSL/TLS. Aumenta la seguridad pero disminuye el rendimiento
+
+require_ssl_reuse=NO
+
+# Deshabilita utilizar TLS/SSL con usuarios anónimos
+
+allow_anon_ssl=NO
+
+# Se prefiere TLSv1 sobre SSLv2, y SSLv3
+
+ssl_tlsv1=YES
+
+ssl_sslv2=NO
+
+ssl_sslv3=NO
+
+# Rutas del certificado, y firma digital
+
+rsa_cert_file=/etc/ssl/certs/vsftpd.crt
+
+rsa_private_key_file=/etc/ssl/private/vsftpd.key
+
+# This option specifies the location of the RSA certificate to use for SSL
+
+# encrypted connections.
+
+rsa_cert_file=/etc/ssl/certs/vsftpd.pem
+
+rsa_private_key_file=/etc/ssl/private/vsftpd.key
+
+################JAIL USERS
+
+secure_chroot_dir=/var/run/vsftpd/empty
+
+chroot_list_file=/etc/vsftpd/chroot_list
+
+
+
+
+
+# 1. All users are jailed by default:
+
+chroot_local_user=YES
+
+chroot_list_enable=NO
+
+
+
+# 2. Just some users are jailed:
+
+#chroot_local_user=NO
+
+#chroot_list_enable=YES
+
+# Create the file /etc/vsftpd.chroot_list with a list of the jailed users.
+
+
+
+# 3. Just some users are "free":
+
+#chroot_local_user=YES
+
+#chroot_list_enable=YES
+
+# Create the file /etc/vsftpd.chroot_list with a list of the "free" users.
+
+
+
+##############################DENY/ALLOW USERS
+
+
+
+###To DENY some users to login 
+
+
+
+#userlist_deny=YES
+
+#In the file /etc/vsftpd.denied_users add the username of the users that can't login. 
+
+#One username per line.
+
+#userlist_file=/etc/vsftpd.denied_users
+
+
+
+
+
+
+
+###To ALLOW some users to login
+
+
+
+#userlist_deny=NO
+
+#userlist_enable=YES
+
+#In the file /etc/vsftpd.allowed_users add the username of the users that can login.
+
+#userlist_file=/etc/vsftpd.allowed_users
+
+#The not allowed users will get an error that they can't login before they type their password.
+
+
+
+
+###############LOGS
+
+# Activate logging of uploads/downloads.
+
+#Almacenará el archivo transferido, la información sobre el usuario,la IP, el tiempo etc...
+
+xferlog_enable=YES
+
+xferlog_file=/var/log/vsftpd.log
+
+#En formato estándar
+
+xferlog_std_format=YES
+
+#vsftpd registrará los comandos FTP enviados por los clientes en el archivo de registro. 
+
+#Esto puede incluir comandos como "USER", "PASS", "LIST", "RETR", "STOR"
+
+log_ftp_protocol=YES
+
+vsftpd_log_file=/var/log/vsftpd.log
+
+
+
+
+################SESIÓN ACTIVA
+
+# Especifica la cantidad máxima de tiempo entre comandos desde un cliente remoto.
+
+idle_session_timeout=300
+
+# Especifica la cantidad máxima de tiempo que las conexiones se pueden aplazar en segundos.
+
+data_connection_timeout=300
+
+#Limitar el número de conexiones concurrentes para evitar que un solo usuario o 
+
+#dirección IP saturen el servidor
+
+max_clients=2
+
+max_per_ip=2
+
+
+
+
+
+#Configure pasv_min_port y pasv_max_port en /etc/vsftpd.conf y permita conexiones 
+
+#salientes en los puertos que configuró en su firewall.
+
+pasv_min_port=30300
+
+pasv_max_port=30309
+
+
+
+
+
+
+
+
+
+# Activate directory messages - messages given to remote users when they
+
+# go into a certain directory.
+
+dirmessage_enable=YES
+
+
+
+# If enabled, vsftpd will display directory listings with the time
+
+# in  your  local  time  zone.  The default is to display GMT. The
+
+# times returned by the MDTM FTP command are also affected by this
+
+# option.
+
+use_localtime=YES
+
+
+
+# Make sure PORT transfer connections originate from port 20 (ftp-data).
+
+connect_from_port_20=YES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######################PERMISOS
+
+#Esta máscara hace que cada vez que subas un archivo, sus permisos sean 755
+
+local_umask=022
+
+connect_from_port_20=YES
+
+pam_service_name=vsftpd
